@@ -1,4 +1,4 @@
-const myWbGame = {
+const myWbGameExample = {
     bpm: 60,
     keys: [
         '',
@@ -48,4 +48,15 @@ const myWbGame = {
 
         ''
     ]
+};
+
+let myWbGame = {};
+
+const parseSearchParams = function () {
+    let obj = {};
+    let arr = location.search.slice(1).split('&').map(x => {
+        let a = x.split('=');
+        obj[a[0]] = a[1];
+    });
+    return obj;
 };

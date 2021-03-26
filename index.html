@@ -19,7 +19,28 @@
         </div>
         <script type="text/javascript" src="./js/main.js"></script>
         <script type="text/javascript">
-        Waterblume.bootloadGame(myWbGame, document.querySelector('#waterblume-main'));
+        const pageUrlSearchParams = parseSearchParams();
+        (function () {
+            // Get track info
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', `./tracks/${pageUrlSearchParams['track']}`);
+            xhr.onload = function (e) {
+                if (e.target.status === 200) {
+                    myWbGameTrackConfig = e.target.responseText;
+                    console.log(myWbGameTrackConfig);
+                    Waterblume.bootloadGame(Waterblume.readConfigVer1(myWbGameTrackConfig), document.querySelector('#waterblume-main'));
+                } else {
+                    // alert('404 Not Found');
+                    console.log(e);
+                    setTimeout(function () {
+                        // location.href = '?track=example';
+                    }, 500);
+                };
+            };
+            xhr.send();
+        })();
+        </script>
+        <script type="text/javascript">
         </script>
     </body>
 </html>

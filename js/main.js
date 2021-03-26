@@ -7,6 +7,36 @@ Waterblume.RAM = {
     'progress': 0
 };
 
+Waterblume.readConfigVer1 = function (configText) {
+    let lines = configText.trim().split('\n');
+    console.log(lines);
+    if (lines[0].indexOf('WaterblumeTrackConfig:v1') !== 0) {
+        console.log(`Error: Cannot find magic header at the initial line`);
+        return 1;
+    };
+    let metadata = {};
+    let trackBeatsArr = [];
+    lines.slice(1).map(function (line) {
+        if (line[0] === '#') {
+            return 0;
+        };
+        if (line[0] === '@') {
+            // let tline = line.slice(1)
+            metadata[line.slice(1).split('=')[0]] = line.slice(1).split('=')[1]
+            if (!isNaN(parseInt(line.slice(1).split('=')[1]))) {
+                metadata[line.slice(1).split('=')[0]] = parseInt(line.slice(1).split('=')[1])
+            };
+            return 0;
+        };
+        // Actual key notes
+        trackBeatsArr.push(line.replace(/[^wasdijkl]/g, ''));
+    });
+    return {
+        bpm: metadata.bpm,
+        keys: trackBeatsArr
+    };
+};
+
 Waterblume.renderScreen = function (tickFrameData) {
     let listContent = 'wasdijkl'.split('').map(function (x) {
         let keyProgress = tickFrameData.keys[x];
